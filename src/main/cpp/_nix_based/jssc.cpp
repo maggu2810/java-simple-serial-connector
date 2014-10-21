@@ -72,8 +72,8 @@ JNIEXPORT jlong JNICALL Java_jssc_SerialNativeInterface_openPort(JNIEnv *env, jo
         }
         
         //since 2.2.0 -> (check termios structure for separating real serial devices from others)
-        termios *settings = new termios();
-        if(tcgetattr(hComm, settings) == 0){
+        termios settings;
+        if(tcgetattr(hComm, &settings) == 0){
             int flags = fcntl(hComm, F_GETFL, 0);
             flags &= ~O_NDELAY;
             fcntl(hComm, F_SETFL, flags);
@@ -82,7 +82,6 @@ JNIEXPORT jlong JNICALL Java_jssc_SerialNativeInterface_openPort(JNIEnv *env, jo
             closePort(hComm);//since 2.7.0
             hComm = jssc_SerialNativeInterface_ERR_INCORRECT_SERIAL_PORT;//-4;
         }
-        delete settings;
         //<- since 2.2.0
     }
     else {//since 0.9 ->
