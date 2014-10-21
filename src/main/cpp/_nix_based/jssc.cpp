@@ -23,26 +23,9 @@
  * web-site: http://scream3r.org | http://code.google.com/p/java-simple-serial-connector/
  */
 
-#include <stdio.h>
 #include <fcntl.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
 #include <termios.h>
-#include <time.h>
 #include <errno.h>//-D_TS_ERRNO use for Solaris C++ compiler
-
-#include <sys/select.h>//since 2.5.0
-
-#ifdef __linux__
-    #include <linux/serial.h>
-#endif
-#ifdef __SunOS
-    #include <sys/filio.h>//Needed for FIONREAD in Solaris
-    #include <string.h>//Needed for select() function
-#endif
-#ifdef __APPLE__
-    #include <serial/ioss.h>//Needed for IOSSIOSPEED in Mac OS X (Non standard baudrate)
-#endif
 
 #include "serial.h"
 #include <jni.h>
