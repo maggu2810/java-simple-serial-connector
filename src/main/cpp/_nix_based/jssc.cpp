@@ -248,16 +248,16 @@ JNIEXPORT jboolean JNICALL Java_jssc_SerialNativeInterface_setParams
     termios *settings = new termios();
     if(tcgetattr(portHandle, settings) == 0){
         if(baudRateValue != -1){
-            //Set standart baudrate from "termios.h"
+            //Set standard baudrate from "termios.h"
             if(cfsetispeed(settings, baudRateValue) < 0 || cfsetospeed(settings, baudRateValue) < 0){
                 goto methodEnd;
             }
         }
         else {
         #ifdef __SunOS
-            goto methodEnd;//Solaris don't support non standart baudrates
+            goto methodEnd;//Solaris don't support non standard baudrates
         #elif defined __linux__
-            //Try to calculate a divisor for setting non standart baudrate
+            //Try to calculate a divisor for setting non standard baudrate
             serial_struct *serial_info = new serial_struct();
             if(ioctl(portHandle, TIOCGSERIAL, serial_info) < 0){ //Getting serial_info structure
                 delete serial_info;
@@ -275,7 +275,7 @@ JNIEXPORT jboolean JNICALL Java_jssc_SerialNativeInterface_setParams
                     delete serial_info;
                     goto methodEnd;
                 }
-                if(ioctl(portHandle, TIOCSSERIAL, serial_info) < 0){//Try to set new settings with non standart baudrate
+                if(ioctl(portHandle, TIOCSSERIAL, serial_info) < 0){//Try to set new settings with non standard baudrate
                     delete serial_info;
                     goto methodEnd;
                 }
