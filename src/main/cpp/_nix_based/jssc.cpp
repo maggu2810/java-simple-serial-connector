@@ -22,6 +22,8 @@
  * e-mail: scream3r.org@gmail.com
  * web-site: http://scream3r.org | http://code.google.com/p/java-simple-serial-connector/
  */
+
+#include "serial.h"
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -63,7 +65,7 @@ JNIEXPORT jstring JNICALL Java_jssc_SerialNativeInterface_getNativeLibraryVersio
  */
 JNIEXPORT jlong JNICALL Java_jssc_SerialNativeInterface_openPort(JNIEnv *env, jobject object, jstring portName, jboolean useTIOCEXCL){
     const char* port = env->GetStringUTFChars(portName, JNI_FALSE);
-    jlong hComm = open(port, O_RDWR | O_NOCTTY | O_NDELAY);
+    jlong hComm = openPort(port);
     if(hComm != -1){
         //since 2.2.0 -> (check termios structure for separating real serial devices from others)
         termios *settings = new termios();
