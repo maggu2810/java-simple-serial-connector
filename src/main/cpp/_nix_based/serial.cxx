@@ -28,6 +28,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <errno.h>
+#include <unistd.h>
 
 /*!
  * open serial port
@@ -38,4 +40,32 @@
 int openPort(const char* port) {
     int fd = open(port, O_RDWR | O_NOCTTY | O_NDELAY);
     return fd;
+}
+
+int closePort(int fd) {
+    return close(fd);
+}
+
+/*!
+ * set / unset exclusive access.
+ *
+ * @param fd The file descriptor of the port.
+ * @return For documentation of return value and also error number, see ioctl.
+ */
+int setExclusiveAccess(int fd, int enable) {
+    if (enable) {
+#if defined TIOCEXCL //&& !defined __SunOS
+        return ioctl(fd, TIOCEXCL);
+#else
+        errno = ENOTSUP;
+        return -1;
+#endif
+    } else {
+#if defined TIOCNXCL
+        return ioctl(fd, TIOCNXCL);
+#else
+        errno = ENOTSUP;
+        return -1;
+#endif
+    }
 }
